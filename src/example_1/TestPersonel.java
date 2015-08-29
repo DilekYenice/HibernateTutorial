@@ -1,18 +1,19 @@
 
 package example_1;
-import org.hibernate.cfg.AnnotationConfiguration;
+import javax.security.auth.login.Configuration;
 
 
 public class TestPersonel {
   
     public static void main(String[] args){
-    AnnotationConfiguration config = new AnnotationConfiguration();
+    Configuration config = new Configuration();
     config.addAnnotatedClass(Personel.class);
     config.configure("hibernate.cfg.xml");
     
     new SchemaExport(config).create(true, true);
     
-    SessionFactory factory = config.buildSessionFactory();
+    ServiceRegistry registry = new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
+    SessionFactory factory = config.buildSessionFactory(registry);
     Session session = factory.getCurrentSession();
     session.beginTransaction();
     
